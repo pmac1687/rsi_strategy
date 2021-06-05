@@ -1,0 +1,6 @@
+jupyter notebook
+psycopg2-binary==2.8.6
+numpy==1.20.3
+pandas==1.2.4
+stockstats==0.3.2
+tapy==1.9.1
