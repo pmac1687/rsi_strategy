@@ -11,15 +11,6 @@ import sqlalchemy
 def query_db(que):
     conn = psycopg2.connect(database="postgres", user=keys.user, password=keys.password, host=keys.host, port="5432")
     cur = conn.cursor()
-    #cur.execute(f"select * from master_ticker_list limit 5;")
-    #cur.execute(que)
-    #SQL_Query = pd.read_sql_query(que, conn)
-    #cols = ['ticker_id', 'open', 'close', 'high', 'low', 'volume', 'date']
-    #df = pd.DataFrame(SQL_Query, columns=cols)
-    #print(df)
-    #data = conn.read_frame(que, cur)
-    #print(data)
-    #data = cur.fetchall()
     credentials = f"postgresql://{keys.user}:{keys.password}@{keys.host}:5432/postgres"# read in your SQL query results using pandas
     df = pd.read_sql(que, con = credentials)
     print(df)
@@ -33,21 +24,40 @@ def build_data_query(ticks):
     tickers = []
     for i in range(ticker_list_len):
         if i == 99:
-            ticker_ids += f"{ticks['id'][0]}"
+            ticker_ids += f"{ticks['id'][i]}"
         else:
-            ticker_ids += f"{ticks['id'][0]},"
-    print(len(tickers), len(ticker_ids))
+            ticker_ids += f"{ticks['id'][i]},"
+    print(ticker_ids)
     que = f"select * from historical_stock_data where ticker_id in ({ticker_ids}) and date >= '2021-01-01';"
     return que
 
 
 
 def check_optimal_stock(df, ticks):
+    tick_arr = df['ticker_id']
+    print(tick_arr)
     for i in range(len(ticks)):
         tick = ticks['id'][i]
+        ind_arr = []
+        for b in range(len(df)):
+            if df['ticker_id'][b] == tick:
+                ind_arr.append(b)
+        arr2 = ind_arr[-10:]
+        check_ma(arr2,df)
+        hit_rsi = False
+        optimal = False
+        for c in arr2:
+
+        break
+
+
         #print(tick)
-        arr = df.loc[df['ticker_id'] > 4]
-        print(df.loc[df['ticker_id']])
+        #arr = df.loc[df['ticker_id'] == tick]
+        ##arr2 = df.loc[df['ticker_id'] == '548222485']
+        #for b in arr:
+        #    if b.index == "2021-05-07 00:00:00":
+        #        print(b,'duh')
+        #break
     
 
 def main():
